@@ -6,6 +6,11 @@ class Game {
     this.missed = 0;
     this.phrases = this.createPhrases();
     this.activePhrase = null;
+    this.sounds = [
+      new Audio('sound/win.mp3'),
+      new Audio('sound/right.mp3'),
+      new Audio('sound/wrong.mp3')
+    ];
   }
   /**
    * Create phrases for us in game
@@ -36,6 +41,7 @@ class Game {
    * Begins game by selecting a random phrase and displaying it to user
    */
   startGame() {
+    
     document.getElementById('overlay').style.display = 'none';
     const activePhrase = this.getRandomPhrase();
     activePhrase.addPhraseToDisplay();
@@ -74,7 +80,10 @@ class Game {
     this.missed += 1;
     if (this.missed === 5) {
       this.gameOver(false);
+      this.sounds[2].play();
+     
     }
+
   }
 
   /**
@@ -87,15 +96,17 @@ class Game {
     if (gameWon) {
       document.querySelector('.start').style.backgroundColor = '#1ABC9C';
       document.getElementById('game-over-message').innerText = 'Greate Job!';
+      this.sounds[0].play();
     } else {
       document.querySelector('.start').style.backgroundColor = '#FF5733';
       document.getElementById('game-over-message').innerText =
         'You Lost All Your Hearts!';
+      this.sounds[2].play();
     }
     /**
      * reset game for a new game
      * deleting li list, updading heart png and updating onscreen keyboard key
-     * 
+     *
      *  */
     const phraseSection = document.querySelector('#phrase ul');
     phraseSection.innerHTML = '';
@@ -105,11 +116,18 @@ class Game {
       .attr('src', 'images/liveHeart.png');
     this.missed = 0;
 
-    const key = document.querySelectorAll('.key')
-    for(let i = 0; i < key.length; i++) {
-        key[i].className = 'key';
-        key[i].removeAttribute('disabled', '')
-    }
+    const keys = document.querySelectorAll('.key');
+    keys.forEach(key => {
+        key.removeAttribute('disabled','');
+        key.className = 'key';
+    })
+    // for (let i = 0; i < key.length; i++) {
+    //   key[i].removeAttribute('disabled', '');
+    //   key[i].className = 'key';
+      
+    //   console.log(key[i]);
+    //   console.log(key.length)
+    // } 
   }
 
   /**
@@ -121,6 +139,7 @@ class Game {
     if (this.activePhrase.checkLetter(button.textContent)) {
       button.className += ' chosen';
       this.activePhrase.showMatchLetter(button.textContent);
+      this.sounds[1].play();
       this.checkForWin();
       if (this.checkForWin() === true) {
         this.gameOver(true);
@@ -128,8 +147,7 @@ class Game {
     } else {
       this.removeLife();
       button.className += ' wrong';
+      this.sounds[2].play();
     }
   }
-
-  
 }
