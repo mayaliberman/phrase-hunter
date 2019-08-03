@@ -121,13 +121,7 @@ class Game {
         key.removeAttribute('disabled','');
         key.className = 'key';
     })
-    // for (let i = 0; i < key.length; i++) {
-    //   key[i].removeAttribute('disabled', '');
-    //   key[i].className = 'key';
-      
-    //   console.log(key[i]);
-    //   console.log(key.length)
-    // } 
+     
   }
 
   /**
@@ -145,8 +139,8 @@ class Game {
         this.gameOver(true);
       }
     } else {
-      this.removeLife();
       button.className += ' wrong';
+      this.removeLife();
       this.sounds[2].play();
     }
   }
